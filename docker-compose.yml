@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  db-mounirmasterclass:
+    image: postgres:15-alpine
+    restart: always
+    container_name: db-mounirmasterclass
+    environment:
+      - 'POSTGRES_USER=mounirmasterclass'
+      - 'POSTGRES_PASSWORD=PZvoxEML2aVeIQgj'
+      - 'POSTGRES_DB=mounirmasterclass'
+    ports:
+      - "5435:5435"
+    expose:
+      - "5435"
+    command: -p 5435
+    volumes:
+      - db-mounirmasterclass:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: app
+    depends_on:
+      - db-mounirmasterclass
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-mounirmasterclass:5435/mounirmasterclass
+      - SPRING_DATASOURCE_USERNAME=mounirmasterclass
+      - SPRING_DATASOURCE_PASSWORD=PZvoxEML2aVeIQgj
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+
+volumes:
+  db-mounirmasterclass:
