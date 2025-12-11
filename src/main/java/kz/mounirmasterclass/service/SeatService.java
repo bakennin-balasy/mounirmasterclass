@@ -28,7 +28,7 @@ public class SeatService {
 
     public Seat addNewSeat(SeatCreateDto dto) {
 
-        if (seatRepository.existsByRowAndSeat(dto.getRowNumber(), dto.getSeatNumber())) {
+        if (seatRepository.existsByRowAndSeatAndSectionAndCategory(dto.getRowNumber(), dto.getSeatNumber(), dto.getSection(), dto.getCategory())) {
             throw new RuntimeException("Это место уже существует!");
         }
 
@@ -68,6 +68,15 @@ public class SeatService {
 
         seat.setStatus(SeatStatus.FREE);
         return seatRepository.save(seat);
+    }
+
+    @Transactional
+    public void deleteSeat(Long seatId) {
+
+        Seat seat = seatRepository.findById(seatId)
+                .orElseThrow(() -> new RuntimeException("Место не найдено"));
+
+        seatRepository.delete(seat);
     }
 }
 

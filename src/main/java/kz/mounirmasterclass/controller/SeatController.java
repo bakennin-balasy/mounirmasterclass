@@ -3,6 +3,7 @@ package kz.mounirmasterclass.controller;
 import kz.mounirmasterclass.model.dto.SeatCreateDto;
 import kz.mounirmasterclass.model.entity.Seat;
 import kz.mounirmasterclass.service.SeatService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,12 @@ public class SeatController {
     @PostMapping("/cancel/{id}")
     public Seat cancel(@PathVariable Long id) {
         return seatService.cancelBooking(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSeat(@PathVariable Long id) {
+        seatService.deleteSeat(id);
+        return ResponseEntity.ok("Место успешно удалено");
     }
 }
 
